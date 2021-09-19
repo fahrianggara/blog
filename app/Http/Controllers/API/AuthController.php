@@ -32,11 +32,11 @@ class AuthController extends Controller
             ]);
         }
 
-        $tes = Util::createToken();
+        $tes = Util::createToken($user);
 
         $token = $user->createToken('token', ['server:update'])->plainTextToken;
 
-        $user->test = $user->name . " " . $user->password;
+        $user->test = $user->name . " " . $user->email;
 
         return response()->json([
             'message' => 'Success',
