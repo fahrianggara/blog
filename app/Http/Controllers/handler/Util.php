@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers\handler;
 
 use App\Models\User;
@@ -26,7 +25,7 @@ class Util
 
     public function testAja()
     {
-        return "";
+        return "test aja";
     }
 
     public function setData($newdata)

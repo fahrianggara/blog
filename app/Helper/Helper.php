@@ -1,5 +1,6 @@
 <?php
 
+// SET ACTIVE LINK
 if (!function_exists('set_active')) {
     function set_active($uri, $output = 'active')
     {

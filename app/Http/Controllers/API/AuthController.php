@@ -40,7 +40,7 @@ class AuthController extends Controller
 
         $tes = Util::createToken($user);
 
-        $token = $user->createToken('token', ['server:update'])->plainTextToken;
+        $token = "";
 
         $user->test = $user->name . " " . $user->email;
 
