@@ -14,6 +14,6 @@ class Util
 
     public function testAja()
     {
-        return 2;
+        return "";
     }
 }
