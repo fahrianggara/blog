@@ -6,6 +6,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\handler\UserUtil;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -20,11 +21,16 @@ class AuthController extends Controller
     {
         $a = new Util();
 
-        $user = User::where('email', $request->email)->first();
+        $a->setData(100);
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        $user = UserUtil::getUserByEmail($request->email);
+
+        $check = $a->checkPassword($user, $request);
+
+        if ($check) {
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => 'Unauthorized',
+                'check' => $check
             ], 401);
 
             /*throw ValidationException::withMessages([
@@ -38,12 +44,18 @@ class AuthController extends Controller
 
         $user->test = $user->name . " " . $user->email;
 
+        $user->tetssss = $a->getData();
+
+        $a->setData(50);
+
         return response()->json([
             'message' => 'Success',
             'data' => $user,
             'token' => $token,
             'test' => $tes,
-            'test2' => $a->testAja()
+            'test2' => $a->testAja(),
+            'check' => $check,
+            'dataaaa' => $a->getData()
         ], 200);
     }
 
