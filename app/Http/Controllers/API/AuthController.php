@@ -7,30 +7,20 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\handler\UserUtil;
-use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
-
 use App\Http\Controllers\handler\Util;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
     // Login dengan API
     public function login(Request $request)
     {
-        $a = new Util();
+        $user = User::getUserByEmail($request->email);
 
-        $a->setData(100);
-
-        $user = UserUtil::getUserByEmail($request->email);
-
-        $check = $a->checkPassword($user, $request);
-
-        if ($check) {
+        if (User::checkUserPassword($user, $request)) {
             return response()->json([
-                'message' => 'Unauthorized',
-                'check' => $check
+                'message' => 'Unauthorized'
             ], 401);
 
             /*throw ValidationException::withMessages([
@@ -38,24 +28,12 @@ class AuthController extends Controller
             ]);*/
         }
 
-        $tes = Util::createToken($user);
-
-        $token = "";
-
-        $user->test = $user->name . " " . $user->email;
-
-        $user->tetssss = $a->getData();
-
-        $a->setData(50);
+        $token = User::createNewToken($user);
 
         return response()->json([
             'message' => 'Success',
             'data' => $user,
             'token' => $token,
-            'test' => $tes,
-            'test2' => $a->testAja(),
-            'check' => $check,
-            'dataaaa' => $a->getData()
         ], 200);
     }
 

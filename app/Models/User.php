@@ -1,4 +1,6 @@
-<?php
+<?php /** @noinspection PhpUndefinedFieldInspection */
+
+/** @noinspection PhpUndefinedClassInspection */
 
 namespace App\Models;
 
@@ -8,10 +10,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
 use Spatie\Permission\Models\Permission;
@@ -97,6 +101,26 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function getUserByEmail($email)
+    {
+        return User::where('email', $email)->first();
+    }
+
+    public static function getUserById($id)
+    {
+        return User::where('id', $id)->first();
+    }
+
+    public static function checkUserPassword(User $user, Request $request)
+    {
+        return (!$user || !Hash::check($request->password, $user->password));
+    }
+
+    public static function createNewToken(User $user)
+    {
+        return $user->createToken('token', ['server:update'])->plainTextToken;
+    }
 
     public function scopeSearch($query, $name)
     {
